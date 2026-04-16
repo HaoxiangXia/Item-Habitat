@@ -1,0 +1,94 @@
+# Python 字节码和缓存
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Python 构建和分发
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Python 虚拟环境
+.venv/
+venv/
+.envrc
+
+# Python 版本管理
+.python-version
+
+# 集成开发环境
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
+*.db-journal
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite-journal
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 日志文件
+*.log
+
+# 环境变量文件
+.env
+.env.local
+.env.*.local
+
+# 测试覆盖率
+.coverage
+htmlcov/
+.pytest_cache/
+.hypothesis/
+.tox/
+.nox/
+
+# Python 类型检查与静态分析缓存
+.mypy_cache/
+.ruff_cache/
+.pyre/
+
+# PID 文件
+*.pid
+*.pid.lock
+
+# Kilo 工具
+.kilo/
+
+# uv 缓存
+.uv-cache/
+
+# 前端依赖与构建产物（monorepo 子目录）
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/.vite/
+
+# 截图导入上传文件
+uploads/receipt-imports/

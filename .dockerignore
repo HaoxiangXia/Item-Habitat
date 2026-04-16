@@ -1,0 +1,59 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info
+.eggs
+build/
+dist/
+downloads/
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+warehouse.db
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Documentation
+README.md
+ui-design-guide.md
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Test
+.pytest/
+.coverage
+htmlcov/
+
+# Misc
+*.md
+!requirements.txt
