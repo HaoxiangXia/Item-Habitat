@@ -1,36 +1,45 @@
 /* ========== 字体引入 ========== */
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap');
 
-/* 仓储管理系统 - 极光毛玻璃设计系统 */
+/* 仓储管理系统 - 蓝白大圆角设计系统 */
 
 /* ========== CSS 变量 ========== */
 :root {
-    --color-bg: #e8e6f0;
-    --color-text: #3a3550;
-    --color-text-secondary: #5c5678;
-    --color-text-muted: #8a8aa8;
-    --color-status-normal: #34c759;
-    --color-status-alarm: #ff3b30;
-    --color-status-offline: #b0a8c8;
-    --color-info: #2d8a4e;
-    --color-warning: #a67c00;
+    /* 核心色板 - 增强蓝白色调 */
+    --color-bg: #e6effb; /* 更明显的浅蓝底色 */
+    --color-bg-alt: #f0f7ff;
+    --color-text: #1e293b;
+    --color-text-secondary: #475569;
+    --color-text-muted: #64748b;
+    
+    /* 品牌色 */
+    --color-brand: #2563eb;
+    --color-brand-hover: #1d4ed8;
+    --color-status-normal: #10b981;
+    --color-status-alarm: #ef4444;
+    --color-status-offline: #cbd5e1;
+    --color-info: #3b82f6;
+    --color-warning: #f59e0b;
 
-    --glass-bg: rgba(255, 255, 255, 0.18);
-    --glass-blur: 16px;
+    /* 大圆角与毛玻璃 */
+    --glass-bg: rgba(255, 255, 255, 0.25); /* 降低不透明度，从 0.45 改为 0.25 */
+    --glass-blur: 28px; /* 增加模糊度以保持质感 */
     --glass-border: rgba(255, 255, 255, 0.3);
-    --glass-radius: 24px;
+    --glass-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+    --glass-radius: 32px; /* 大圆角风格 */
     --glass-radius-sm: 16px;
 
+    /* 字体定义 */
     --font-display: 'Outfit', sans-serif;
     --font-body: 'DM Sans', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
 
-    --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
-    --duration-fast: 0.15s;
-    --duration-normal: 0.25s;
-    --duration-slow: 0.35s;
+    --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --duration-fast: 0.2s;
+    --duration-normal: 0.3s;
+    --duration-slow: 0.5s;
 
-    --sidebar-width: 220px;
+    --sidebar-width: 200px;
 }
 
 /* ========== 全局重置 ========== */
@@ -49,7 +58,7 @@ body {
     font-family: var(--font-body);
     background-color: var(--color-bg);
     color: var(--color-text);
-    line-height: 1.6;
+    line-height: 1.5;
     min-height: 100vh;
     display: flex;
     overflow-x: hidden;
@@ -58,8 +67,8 @@ body {
 }
 
 ::selection {
-    background: rgba(184, 169, 232, 0.3);
-    color: var(--color-text);
+    background: rgba(37, 99, 235, 0.15);
+    color: var(--color-brand);
 }
 
 /* ========== 自定义滚动条 ========== */
@@ -72,111 +81,109 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(140, 120, 180, 0.25);
-    border-radius: 3px;
+    background: rgba(100, 116, 139, 0.2);
+    border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(140, 120, 180, 0.4);
-}
-
-/* ========== 极光背景 ========== */
+/* ========== 增强背景氛围 (明显蓝色) ========== */
 .aurora-bg {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 0;
+    z-index: -1;
     pointer-events: none;
     overflow: hidden;
+    background: linear-gradient(135deg, #e0ebff 0%, #f0f7ff 100%);
+}
+
+.aurora-bg::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle at 1px 1px, rgba(37, 99, 235, 0.05) 1px, transparent 0);
+    background-size: 32px 32px;
 }
 
 .aurora-band {
     position: absolute;
     border-radius: 50%;
-    filter: blur(100px);
-    opacity: 0.6;
+    filter: blur(120px);
+    opacity: 0.4;
 }
 
 .aurora-band-1 {
-    width: 900px;
-    height: 600px;
+    width: 1000px;
+    height: 800px;
     top: -10%;
-    left: -5%;
-    background: radial-gradient(circle, rgba(30, 58, 138, 0.55) 0%, transparent 70%);
+    right: -5%;
+    background: radial-gradient(circle, #bcd1ff 0%, transparent 70%);
 }
 
 .aurora-band-2 {
-    width: 1000px;
-    height: 700px;
-    top: 5%;
-    right: -10%;
-    background: radial-gradient(circle, rgba(88, 28, 135, 0.45) 0%, transparent 70%);
+    width: 800px;
+    height: 800px;
+    bottom: -15%;
+    left: -10%;
+    background: radial-gradient(circle, #d6e4ff 0%, transparent 60%);
 }
 
 .aurora-band-3 {
-    width: 700px;
-    height: 500px;
-    bottom: -5%;
-    left: 10%;
-    background: radial-gradient(circle, rgba(37, 99, 235, 0.50) 0%, transparent 70%);
-}
-
-.aurora-band-4 {
     width: 600px;
-    height: 450px;
-    top: 40%;
-    left: 40%;
-    background: radial-gradient(circle, rgba(126, 34, 206, 0.40) 0%, transparent 70%);
+    height: 600px;
+    top: 30%;
+    left: 20%;
+    background: radial-gradient(circle, #eef2ff 0%, transparent 80%);
 }
 
-/* ========== 侧边导航栏 ========== */
+/* ========== 侧边导航栏 (纯白无毛玻璃) ========== */
 .sidebar {
     width: var(--sidebar-width);
     min-height: 100vh;
-    background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border-right: 1px solid rgba(255, 255, 255, 0.25);
-    border-radius: 0 24px 24px 0;
+    background: #ffffff; /* 纯白 */
+    border-right: 1px solid #e2e8f0;
     position: fixed;
     left: 0;
     top: 0;
     z-index: 100;
     display: flex;
     flex-direction: column;
-    padding: 28px 16px;
-    transition: transform var(--duration-slow) var(--ease-out);
+    padding: 32px 14px;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.02);
 }
 
 .sidebar-brand {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 0 8px 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0 12px 24px;
+    border-bottom: 1px solid #f1f5f9;
     margin-bottom: 24px;
 }
 
 .sidebar-logo {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     border-radius: 10px;
-    background: linear-gradient(135deg, rgba(30, 58, 138, 0.8), rgba(126, 34, 206, 0.8));
+    background: var(--color-brand);
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     font-family: var(--font-display);
     flex-shrink: 0;
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.2);
 }
 
 .sidebar-title {
     font-family: var(--font-display);
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
     color: var(--color-text);
     letter-spacing: -0.5px;
@@ -193,8 +200,7 @@ body {
 .sidebar-menu a {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 14px;
+    padding: 12px 18px;
     border-radius: var(--glass-radius-sm);
     text-decoration: none;
     color: var(--color-text-secondary);
@@ -202,29 +208,164 @@ body {
     font-weight: 500;
     transition: all var(--duration-normal) var(--ease-out);
     position: relative;
+    border: 1px solid transparent;
 }
 
 .sidebar-menu a:hover {
-    color: var(--color-text);
-    background: rgba(255, 255, 255, 0.12);
+    color: var(--color-brand);
+    background: #f8fbff;
 }
 
 .sidebar-menu a.active {
-    color: var(--color-text);
-    background: rgba(255, 255, 255, 0.35);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4), 0 2px 8px rgba(140, 120, 180, 0.08);
+    color: var(--color-brand);
+    background: #f0f7ff;
+    border-color: #dbeafe;
+    font-weight: 600;
 }
 
 .sidebar-menu a .nav-icon {
+    display: none;
+}
+
+/* ========== 大圆角毛玻璃卡片 ========== */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--glass-radius); /* 应用大圆角 */
+    padding: 32px;
+    margin-bottom: 32px;
+    box-shadow: var(--glass-shadow);
+    transition: all var(--duration-slow) var(--ease-out);
+}
+
+.glass-card:hover {
+    box-shadow: 0 15px 40px -15px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+    border-color: rgba(37, 99, 235, 0.2);
+}
+
+.glass-card.compact {
+    padding: 24px;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.aurora-band-3 {
+    width: 700px;
+    height: 500px;
+    bottom: -5%;
+    left: 10%;
+    background: radial-gradient(circle, rgba(148, 163, 184, 0.1) 0%, transparent 70%);
+}
+
+.aurora-band-4 {
+    width: 600px;
+    height: 450px;
+    top: 40%;
+    left: 40%;
+    background: radial-gradient(circle, rgba(226, 232, 240, 0.12) 0%, transparent 70%);
+}
+
+/* ========== 侧边导航栏 ========== */
+.sidebar {
+    width: var(--sidebar-width);
+    min-height: 100vh;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-right: 1px solid var(--glass-border);
+    border-radius: 0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 12px;
+    transition: all var(--duration-normal) var(--ease-out);
+    box-shadow: var(--glass-shadow);
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px 24px;
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: 24px;
+}
+
+.sidebar-logo {
     width: 28px;
     height: 28px;
-    border-radius: 8px;
+    border-radius: 6px;
+    background: var(--color-brand);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: var(--font-display);
     flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.sidebar-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: -0.5px;
+}
+
+.sidebar-menu {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 10px 16px;
+    border-radius: var(--glass-radius-sm);
+    text-decoration: none;
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    font-weight: 500;
     transition: all var(--duration-normal) var(--ease-out);
+    position: relative;
+    border: 1px solid transparent;
+}
+
+.sidebar-menu a:hover {
+    color: var(--color-brand);
+    background: rgba(59, 130, 246, 0.05);
+}
+
+.sidebar-menu a.active {
+    color: var(--color-brand);
+    background: white;
+    border-color: var(--glass-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    font-weight: 600;
+}
+
+.sidebar-menu a .nav-icon {
+    display: none; /* 按照要求去除图标 */
 }
 
 .sidebar-menu a.active .nav-icon {
@@ -402,39 +543,37 @@ body {
     font-weight: 400;
 }
 
-/* ========== 毛玻璃卡片 ========== */
+/* ========== 极简卡片 (浅灰毛玻璃) ========== */
 .glass-card {
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
     border: 1px solid var(--glass-border);
     border-radius: var(--glass-radius);
-    padding: 28px;
-    margin-bottom: 28px;
-    box-shadow:
-        0 8px 32px rgba(140, 120, 180, 0.10),
-        inset 0 1px 0 rgba(255, 255, 255, 0.35);
-    transition: all var(--duration-slow) var(--ease-out);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--glass-shadow);
+    transition: all var(--duration-normal) var(--ease-out);
 }
 
 .glass-card:hover {
-    box-shadow:
-        0 16px 48px rgba(140, 120, 180, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
-    transform: translateY(-3px);
+    box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.04);
+    transform: translateY(-1px);
+    border-color: rgba(59, 130, 246, 0.3);
+    background: rgba(248, 250, 252, 0.85);
 }
 
 .glass-card.compact {
-    padding: 22px;
+    padding: 16px;
 }
 
 .card-header {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 20px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--glass-border);
 }
 
 .card-header svg {

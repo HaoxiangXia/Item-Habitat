@@ -92,3 +92,6 @@ frontend/.vite/
 
 # 截图导入上传文件
 uploads/receipt-imports/
+
+AGENTS.md
+.github/

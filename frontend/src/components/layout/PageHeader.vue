@@ -1,9 +1,6 @@
 <template>
   <header class="page-header">
     <div class="page-header-left">
-      <div class="page-header-icon">
-        <slot name="icon" />
-      </div>
       <div>
         <h1>{{ title }}</h1>
         <div v-if="subtitle" class="subtitle">{{ subtitle }}</div>

@@ -1,64 +1,45 @@
 <template>
   <PageHeader
-    title="仓储管理系统"
-    subtitle="使用 Vue3 重构后的单页仓储管理界面"
+    title="栖物志"
+    subtitle="给每件物品一个清晰、可追踪的栖息地"
   >
-    <template #icon>
-      <HomeIcon />
-    </template>
-
     <template #actions>
-      <router-link to="/inbound" class="btn btn-primary">快速入库</router-link>
+      <router-link to="/inbound" class="btn btn-primary">登记新成员</router-link>
     </template>
   </PageHeader>
 
   <div class="stat-grid">
-    <StatCard :value="summary.totalProducts" label="货物总数" description="当前系统中记录的货物条目">
+    <StatCard :value="summary.totalProducts" label="栖息物件" description="当前记录的物品总数">
       <template #icon>
         <PackageIcon />
       </template>
     </StatCard>
 
-    <StatCard :value="summary.totalQuantity" label="总库存" description="所有货物库存数量汇总" tone="accent">
+    <StatCard :value="summary.totalQuantity" label="库存总量" description="所有栖息地的物品汇总" tone="accent">
       <template #icon>
         <TrendIcon />
       </template>
     </StatCard>
 
-    <StatCard :value="summary.totalLocations" label="存储位置" description="已启用的货位数量" tone="success">
+    <StatCard :value="summary.totalLocations" label="栖息领地" description="已定义的存放位置数量" tone="success">
       <template #icon>
         <MapIcon />
       </template>
     </StatCard>
 
-    <StatCard :value="summary.totalTransactions" label="操作记录" description="累计出入库交易次数" tone="warning">
+    <StatCard :value="summary.totalTransactions" label="流转归档" description="累计物品流向记录" tone="warning">
       <template #icon>
         <ClockIcon />
       </template>
     </StatCard>
   </div>
 
-  <GlassCard title="功能入口">
-    <div class="function-grid">
-      <router-link
-        v-for="item in functions"
-        :key="item.path"
-        :to="item.path"
-        class="function-card"
-      >
-        <component :is="item.icon" />
-        <h3>{{ item.title }}</h3>
-        <p>{{ item.description }}</p>
-      </router-link>
-    </div>
-  </GlassCard>
-
   <div class="dashboard-grid">
-    <GlassCard title="低库存提醒">
+    <GlassCard title="短缺预警">
       <EmptyState
         v-if="!lowStockProducts.length"
-        title="当前没有低库存货物"
-        description="所有货物库存都处于安全区间。"
+        title="当前物件充足"
+        description="所有栖息地的物品数量均在理想范围内。"
       >
         <template #icon>
           <CheckIcon />

@@ -5,8 +5,8 @@
 
   <aside class="sidebar" :class="{ open: ui.sidebarOpen }">
     <div class="sidebar-brand">
-      <div class="sidebar-logo">W</div>
-      <div class="sidebar-title">仓储系统</div>
+      <div class="sidebar-logo">H</div>
+      <div class="sidebar-title">栖物志</div>
     </div>
 
     <ul class="sidebar-menu">
