@@ -5,41 +5,30 @@
 
 /* ========== CSS 变量 ========== */
 :root {
-    /* 核心色板 - 增强蓝白色调 */
-    --color-bg: #e6effb; /* 更明显的浅蓝底色 */
-    --color-bg-alt: #f0f7ff;
-    --color-text: #1e293b;
-    --color-text-secondary: #475569;
-    --color-text-muted: #64748b;
-    
-    /* 品牌色 */
-    --color-brand: #2563eb;
+    /* Slate-Blue Diffuse Glass 核心色板 */
+    --color-bg: #e2e8f0; /* 中深浅灰底色 */
+    --color-brand: #3b82f6;
     --color-brand-hover: #1d4ed8;
-    --color-status-normal: #10b981;
-    --color-status-alarm: #ef4444;
-    --color-status-offline: #cbd5e1;
-    --color-info: #3b82f6;
-    --color-warning: #f59e0b;
+    --color-success: #10b981;
+    --color-error: #f43f5e;
+    --color-text: #1e293b; /* 深石板色 */
+    --color-text-secondary: #475569;
+    --color-text-muted: #94a3b8;
 
-    /* 大圆角与毛玻璃 */
-    --glass-bg: rgba(255, 255, 255, 0.25); /* 降低不透明度，从 0.45 改为 0.25 */
-    --glass-blur: 28px; /* 增加模糊度以保持质感 */
-    --glass-border: rgba(255, 255, 255, 0.3);
-    --glass-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
-    --glass-radius: 32px; /* 大圆角风格 */
-    --glass-radius-sm: 16px;
+    /* 玻璃规范变量 */
+    --glass-bg: rgba(255, 255, 255, 0.35);
+    --glass-blur: 20px;
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-shadow: 0 8px 32px rgba(30, 64, 175, 0.08);
+    --glass-inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
 
     /* 字体定义 */
     --font-display: 'Outfit', sans-serif;
     --font-body: 'DM Sans', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
 
-    --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
-    --duration-fast: 0.2s;
-    --duration-normal: 0.3s;
-    --duration-slow: 0.5s;
-
-    --sidebar-width: 200px;
+    --sidebar-width: 220px;
+    --radius-lg: 16px;
 }
 
 /* ========== 全局重置 ========== */
@@ -49,31 +38,18 @@
     box-sizing: border-box;
 }
 
-html {
-    font-size: 14px;
-    scroll-behavior: smooth;
-}
-
 body {
     font-family: var(--font-body);
     background-color: var(--color-bg);
     color: var(--color-text);
-    line-height: 1.5;
     min-height: 100vh;
-    display: flex;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 
-::selection {
-    background: rgba(37, 99, 235, 0.15);
-    color: var(--color-brand);
-}
-
-/* ========== 自定义滚动条 ========== */
+/* ========== 自定义滚动条 - 半透明深灰色调 ========== */
 ::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -81,9 +57,54 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(100, 116, 139, 0.2);
+    background: rgba(30, 41, 59, 0.2);
     border-radius: 10px;
+    backdrop-filter: blur(4px);
 }
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(30, 41, 59, 0.3);
+}
+
+/* ========== 玻璃卡片通用类 ========== */
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow), var(--glass-inner-glow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(30, 64, 175, 0.12), var(--glass-inner-glow);
+}
+
+/* ========== 页面切换动画 (fade-transform) ========== */
+.fade-transform-enter-active,
+.fade-transform-leave-active {
+    transition: all 0.35s ease;
+}
+
+.fade-transform-enter-from {
+    opacity: 0;
+    transform: translateY(8px);
+}
+
+.fade-transform-leave-to {
+    opacity: 0;
+    transform: translateY(-8px);
+}
+
+/* ========== 页面容器布局 ========== */
+.page-container {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 100%;
+}
+
 
 /* ========== 增强背景氛围 (明显蓝色) ========== */
 .aurora-bg {
@@ -1132,166 +1153,209 @@ body {
     gap: 20px;
 }
 
-/* ========== 截图导入页 ========== */
+/* ========== 截图导入页 - 针对 9:21 纵向布局重构 ========== */
 .receipt-import-page {
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 0;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
-.receipt-upload-grid {
+.receipt-split-layout {
     display: grid;
-    grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.8fr);
-    gap: 20px;
-    align-items: stretch;
+    grid-template-columns: 360px 1fr;
+    gap: 32px;
+    align-items: start;
+}
+
+/* 左侧纵向预览 */
+.receipt-preview-aside {
+    position: sticky;
+    top: 24px;
+}
+
+.receipt-stage-card {
+    padding: 0 !important;
+    overflow: hidden;
+    position: relative;
+    border-radius: var(--glass-radius);
+}
+
+.receipt-stage-container {
+    width: 100%;
+    /* 核心 9:21 比例 */
+    aspect-ratio: 9 / 21;
+    background: #000;
+    position: relative;
+    overflow: hidden;
 }
 
 .receipt-dropzone {
-    position: relative;
-    min-height: 300px;
-    border-radius: 24px;
-    border: 1px dashed rgba(126, 34, 206, 0.25);
-    background: rgba(255, 255, 255, 0.12);
-    padding: 20px;
-    overflow: hidden;
+    position: absolute;
+    inset: 0;
+    z-index: 2;
     cursor: pointer;
-    transition: all var(--duration-slow) var(--ease-out);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--duration-normal);
+}
+
+.receipt-dropzone.is-dragging {
+    background: rgba(37, 99, 235, 0.1);
+    box-shadow: inset 0 0 0 2px var(--color-brand);
+}
+
+.receipt-preview-wrapper {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.receipt-dropzone:hover {
-    transform: translateY(-2px);
-    border-color: rgba(126, 34, 206, 0.45);
-    background: rgba(255, 255, 255, 0.18);
-}
-
-.receipt-dropzone.is-dragging {
-    border-color: rgba(30, 58, 138, 0.65);
-    background: rgba(255, 255, 255, 0.24);
-    box-shadow: 0 12px 30px rgba(140, 120, 180, 0.15);
-}
-
-.receipt-dropzone.is-disabled {
-    cursor: wait;
-    opacity: 0.8;
-}
-
-.receipt-file-input {
+.receipt-preview-bg {
     position: absolute;
-    inset: 0;
-    opacity: 0;
-    pointer-events: none;
+    width: 120%;
+    height: 120%;
+    object-fit: cover;
+    filter: blur(30px) brightness(0.4);
+    opacity: 0.6;
 }
 
 .receipt-preview-image {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 24px;
-    filter: saturate(1.05);
-}
-
-.receipt-dropzone-text {
     position: relative;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
     z-index: 1;
-    margin-left: auto;
-    max-width: 340px;
-    padding: 20px 22px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.28);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    box-shadow: 0 8px 20px rgba(140, 120, 180, 0.12);
 }
 
-.receipt-dropzone-kicker {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--color-text-muted);
-    margin-bottom: 10px;
-}
-
-.receipt-dropzone-text h3 {
-    font-family: var(--font-display);
-    font-size: 22px;
-    font-weight: 600;
-    line-height: 1.2;
-    margin-bottom: 8px;
-}
-
-.receipt-dropzone-text p {
-    color: var(--color-text-secondary);
-    font-size: 14px;
-}
-
-.receipt-dropzone-placeholder {
-    max-width: 340px;
-    text-align: center;
-    color: var(--color-text-secondary);
-}
-
-.receipt-dropzone-placeholder svg {
-    width: 52px;
-    height: 52px;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 1.5;
-    margin-bottom: 14px;
-}
-
-.receipt-dropzone-placeholder h3 {
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--color-text);
-    margin-bottom: 8px;
-}
-
-.receipt-upload-side {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-
-.receipt-upload-summary {
-    display: grid;
-    gap: 12px;
+.receipt-preview-meta {
     padding: 20px;
-    border-radius: 22px;
-    background: rgba(255, 255, 255, 0.16);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-}
-
-.receipt-summary-item {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.receipt-summary-label {
+.receipt-filename {
     font-size: 13px;
-    color: var(--color-text-muted);
+    color: var(--color-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.receipt-upload-hint,
-.receipt-helper-text,
-.receipt-confirm-note p {
+.receipt-dropzone-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
     color: var(--color-text-secondary);
-    font-size: 14px;
-    line-height: 1.75;
+    text-align: center;
+    padding: 40px;
+}
+
+.receipt-dropzone-placeholder svg {
+    width: 48px;
+    height: 48px;
+    opacity: 0.5;
+}
+
+/* 右侧内容区 */
+.receipt-content-main {
+    min-width: 0;
 }
 
 .receipt-main-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.85fr);
-    gap: 20px;
+    grid-template-columns: 1fr 280px;
+    gap: 24px;
+    align-items: start;
 }
+
+.receipt-upload-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    margin-bottom: 20px;
+}
+
+.receipt-summary-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
+
+.receipt-summary-item strong {
+    color: var(--color-text);
+}
+
+.receipt-action-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.receipt-line-badge {
+    background: var(--color-brand);
+    color: white;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.receipt-line-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.receipt-line-grid {
+    display: grid;
+    grid-template-columns: 1fr 80px 1.2fr;
+    gap: 16px;
+}
+
+.receipt-field-wide {
+    grid-column: span 3;
+}
+
+/* 按钮全宽工具类 */
+.btn-full {
+    width: 100%;
+    justify-content: center;
+}
+
+/* 状态标签 */
+.badge-confirmed {
+    color: var(--color-status-normal);
+}
+.badge-pending {
+    color: var(--color-warning);
+}
+
+/* 移除过时的青色样式 */
+.text-cyan, .accent-cyan, .btn-cyan {
+    color: var(--color-brand) !important;
+}
+
 
 .receipt-draft-toolbar {
     display: flex;
@@ -1314,6 +1378,114 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+}
+
+.receipt-note {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.receipt-note span {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+}
+
+.receipt-note textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--color-text);
+    font-size: 14px;
+    font-family: var(--font-body);
+    resize: vertical;
+    min-height: 88px;
+    transition: all var(--duration-normal) var(--ease-out);
+}
+
+.receipt-note textarea:focus {
+    outline: none;
+    border-color: var(--color-import-accent);
+    background: rgba(255, 255, 255, 0.35);
+    box-shadow: 0 0 15px var(--color-import-accent-light);
+}
+
+.receipt-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.receipt-line-card {
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 20px;
+    transition: all var(--duration-normal) var(--ease-out);
+}
+
+.receipt-line-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.receipt-line-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.receipt-line-subtitle {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.receipt-line-grid {
+    display: grid;
+    grid-template-columns: 2fr 100px 1.5fr;
+    gap: 16px;
+}
+
+.receipt-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.receipt-field-wide {
+    grid-column: span 3;
+}
+
+.receipt-field span {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+
+.receipt-field input,
+.receipt-field textarea {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    padding: 10px 14px;
+    color: var(--color-text);
+    font-size: 14px;
+    transition: all var(--duration-fast);
+}
+
+.receipt-field input:focus,
+.receipt-field textarea:focus {
+    outline: none;
+    background: white;
+    border-color: var(--color-import-accent);
+    box-shadow: 0 4px 12px var(--color-import-accent-light);
 }
 
 .receipt-lines {
@@ -1650,19 +1822,52 @@ body {
 }
 
 .modal-content {
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: var(--modal-glass-bg);
+    backdrop-filter: blur(var(--modal-glass-blur));
+    -webkit-backdrop-filter: blur(var(--modal-glass-blur));
     margin: 0;
     padding: 0;
-    border: 1px solid rgba(255, 255, 255, 0.35);
+    border: 1px solid var(--modal-glass-border);
     border-radius: var(--glass-radius);
     width: 90%;
     max-width: 440px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 24px 64px rgba(58, 53, 80, 0.3);
-    animation: modal-slide-in 0.35s var(--ease-out) both;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.08),
+        inset 0 0 80px rgba(255, 255, 255, 0.1);
+    animation: modal-slide-in 0.3s var(--ease-out) both;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 噪声纹理叠加 */
+.modal-content::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: var(--modal-noise);
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* 1px 半透明边框强化（模拟玻璃边缘反光） */
+.modal-content::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    mask: linear-gradient(135deg, white, transparent 40%, transparent 60%, white);
+    -webkit-mask: linear-gradient(135deg, white, transparent 40%, transparent 60%, white);
 }
 
 @keyframes modal-slide-in {

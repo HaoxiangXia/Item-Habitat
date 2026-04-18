@@ -1,220 +1,187 @@
 <template>
-  <PageHeader
-    title="购物截图导入"
-    subtitle="上传收货截图，手动校对后批量转成入库记录"
-  >
-    <template #icon>
-      <ReceiptIcon />
-    </template>
+  <div class="page-container">
+    <PageHeader
+      title="购物截图导入"
+      subtitle="上传收货截图，手动校对后批量转成入库记录"
+    >
+      <template #icon>
+        <ReceiptIcon />
+      </template>
 
-    <template #actions>
-      <Button variant="secondary" type="button" @click="openPicker">选择截图</Button>
-      <router-link class="nav-btn" to="/inbound">返回入库</router-link>
-    </template>
-  </PageHeader>
+      <template #actions>
+        <Button variant="secondary" type="button" @click="openPicker">选择截图</Button>
+        <router-link class="nav-btn" to="/inbound">返回入库</router-link>
+      </template>
+    </PageHeader>
 
   <div class="receipt-import-page">
-    <GlassCard title="第 1 步：上传截图">
-      <div class="receipt-upload-grid">
-        <div
-          class="receipt-dropzone"
-          :class="{ 'is-dragging': isDragging, 'is-disabled': uploading }"
-          @click="openPicker"
-          @dragenter.prevent="isDragging = true"
-          @dragover.prevent="isDragging = true"
-          @dragleave.prevent="isDragging = false"
-          @drop.prevent="handleDrop"
-        >
-          <input
-            ref="fileInput"
-            class="receipt-file-input"
-            type="file"
-            accept="image/*"
-            @change="handleFileChange"
-          />
-
-          <template v-if="receiptMeta.imageUrl">
-            <img class="receipt-preview-image" :src="receiptMeta.imageUrl" :alt="receiptMeta.originalFilename" />
-            <div class="receipt-dropzone-text">
-              <p class="receipt-dropzone-kicker">当前截图</p>
-              <h3>{{ receiptMeta.originalFilename }}</h3>
-              <p>文件已上传，下面可以直接编辑草稿并确认入库。</p>
-            </div>
-          </template>
-
-          <template v-else>
-            <div class="receipt-dropzone-placeholder">
-              <ReceiptIcon />
-              <h3>点击或拖拽上传购物截图</h3>
-              <p>支持 PNG、JPG、GIF、WEBP，单文件不超过 5MB。</p>
-            </div>
-          </template>
-        </div>
-
-        <div class="receipt-upload-side">
-          <div class="receipt-upload-summary">
-            <div class="receipt-summary-item">
-              <span class="receipt-summary-label">导入状态</span>
-              <strong :class="['badge', statusBadgeClass]">{{ statusLabel }}</strong>
-            </div>
-            <div class="receipt-summary-item">
-              <span class="receipt-summary-label">有效条目</span>
-              <strong>{{ validItems.length }} 条</strong>
-            </div>
-            <div class="receipt-summary-item">
-              <span class="receipt-summary-label">草稿状态</span>
-              <strong>{{ saveStateLabel }}</strong>
-            </div>
-          </div>
-
-          <p class="receipt-upload-hint">
-            这个 MVP 不做自动 OCR，上传后会先生成一个可编辑草稿。你可以把识别到的商品名、数量和位置手动补全，再统一确认入库。
-          </p>
-
-          <p v-if="uploadMessage" class="receipt-helper-text">{{ uploadMessage }}</p>
-        </div>
-      </div>
-    </GlassCard>
-
-    <div class="receipt-main-grid">
-      <GlassCard title="第 2 步：编辑待整理草稿">
-        <EmptyState
-          v-if="!receiptMeta.id"
-          title="还没有导入草稿"
-          description="先上传一张购物截图，系统会自动创建一个可编辑草稿。"
-        >
-          <template #icon>
-            <ReceiptIcon />
-          </template>
-        </EmptyState>
-
-        <template v-else>
-          <div class="receipt-draft-toolbar">
-            <div class="receipt-draft-meta">
-              <span>草稿编号 #{{ receiptMeta.id }}</span>
-              <span>创建于 {{ formatDateTime(receiptMeta.createdAt) }}</span>
-              <span v-if="receiptMeta.confirmedAt">确认于 {{ formatDateTime(receiptMeta.confirmedAt) }}</span>
-            </div>
-
-            <div class="receipt-draft-actions">
-              <Button type="button" variant="secondary" :disabled="isLocked" @click="addItem">添加一行</Button>
-              <Button type="button" variant="secondary" :disabled="isLocked || !hasEditableItems" @click="normalizeItems">
-                清理空行
-              </Button>
-            </div>
-          </div>
-
-          <div class="receipt-lines">
-            <article
-              v-for="(item, index) in draft.items"
-              :key="index"
-              class="receipt-line-card"
-              :class="{ 'is-empty': !item.name.trim() }"
+    <div class="receipt-split-layout">
+      <!-- 左侧：纵向 9:21 预览舞台 -->
+      <aside class="receipt-preview-aside">
+        <GlassCard class="receipt-stage-card" title="截图预览 (9:21 Vertical)">
+          <div class="receipt-stage-container">
+            <div
+              class="receipt-dropzone"
+              :class="{ 'is-dragging': isDragging, 'is-disabled': uploading }"
+              @click="openPicker"
+              @dragenter.prevent="isDragging = true"
+              @dragover.prevent="isDragging = true"
+              @dragleave.prevent="isDragging = false"
+              @drop.prevent="handleDrop"
             >
-              <div class="receipt-line-header">
-                <div class="receipt-line-title">
-                  <span class="receipt-line-badge">条目 {{ index + 1 }}</span>
-                  <span class="receipt-line-subtitle" v-if="item.name.trim()">{{ item.name }}</span>
-                  <span class="receipt-line-subtitle is-muted" v-else>等待填写商品信息</span>
+              <input
+                ref="fileInput"
+                class="receipt-file-input"
+                type="file"
+                accept="image/*"
+                @change="handleFileChange"
+              />
+
+              <template v-if="receiptMeta.imageUrl">
+                <div class="receipt-preview-wrapper">
+                  <img class="receipt-preview-bg" :src="receiptMeta.imageUrl" aria-hidden="true" />
+                  <img class="receipt-preview-image" :src="receiptMeta.imageUrl" :alt="receiptMeta.originalFilename" />
+                </div>
+              </template>
+
+              <template v-else>
+                <div class="receipt-dropzone-placeholder">
+                  <ReceiptIcon />
+                  <h3>投放纵向截图</h3>
+                  <p>支持 9:21 比例长截图</p>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <div v-if="receiptMeta.imageUrl" class="receipt-preview-meta">
+            <strong class="receipt-filename">{{ receiptMeta.originalFilename }}</strong>
+            <Button size="small" variant="secondary" @click="openPicker">更换截图</Button>
+          </div>
+        </GlassCard>
+      </aside>
+
+      <!-- 右侧：详情编辑与控制台 -->
+      <main class="receipt-content-main">
+        <div class="receipt-main-grid">
+          <section class="receipt-editor-section">
+            <GlassCard title="编辑入库清单">
+              <EmptyState
+                v-if="!receiptMeta.id"
+                title="等待上传截图"
+                description="请在左侧区域上传截图，系统将自动开始 OCR 识别。"
+              >
+                <template #icon>
+                  <ReceiptIcon />
+                </template>
+              </EmptyState>
+
+              <template v-else>
+                <div class="receipt-draft-toolbar">
+                  <div class="receipt-draft-meta">
+                    <span class="badge">草稿 #{{ receiptMeta.id }}</span>
+                    <span>{{ formatDateTime(receiptMeta.createdAt) }}</span>
+                  </div>
+
+                  <div class="receipt-draft-actions">
+                    <Button type="button" variant="secondary" :disabled="isLocked" @click="addItem">添加一行</Button>
+                    <Button type="button" variant="secondary" :disabled="isLocked || !hasEditableItems" @click="normalizeItems">
+                      清理
+                    </Button>
+                  </div>
                 </div>
 
-                <Button
-                  type="button"
-                  variant="danger"
-                  size="small"
-                  :disabled="isLocked || draft.items.length === 1"
-                  @click="removeItem(index)"
-                >
-                  删除
-                </Button>
-              </div>
-
-              <div class="receipt-line-grid">
-                <label class="receipt-field">
-                  <span>商品名称</span>
-                  <input v-model="item.name" :disabled="isLocked" placeholder="例如：蓝牙耳机" />
-                </label>
-
-                <label class="receipt-field receipt-field-small">
-                  <span>数量</span>
-                  <input
-                    v-model.number="item.quantity"
+                <label class="receipt-note">
+                  <span>识别摘要 / 备注</span>
+                  <textarea
+                    v-model="draft.note"
                     :disabled="isLocked"
-                    type="number"
-                    min="1"
-                    step="1"
-                  />
+                    rows="2"
+                    placeholder="模型识别摘要..."
+                  ></textarea>
                 </label>
 
-                <label class="receipt-field">
-                  <span>存储位置</span>
-                  <input v-model="item.storageLocation" :disabled="isLocked" placeholder="例如：宿舍衣柜左上格" />
-                </label>
+                <div class="receipt-lines">
+                  <article
+                    v-for="(item, index) in draft.items"
+                    :key="index"
+                    class="receipt-line-card"
+                    :class="{ 'is-empty': !item.name.trim(), 'is-locked': isLocked }"
+                  >
+                    <div class="receipt-line-header">
+                      <span class="receipt-line-badge">{{ index + 1 }}</span>
+                      <Button
+                        type="button"
+                        variant="danger"
+                        size="small"
+                        :disabled="isLocked || draft.items.length === 1"
+                        @click="removeItem(index)"
+                      >
+                        删除
+                      </Button>
+                    </div>
 
-                <label class="receipt-field receipt-field-wide">
-                  <span>备注</span>
-                  <textarea v-model="item.note" :disabled="isLocked" rows="2" placeholder="可选备注"></textarea>
-                </label>
+                    <div class="receipt-line-grid">
+                      <label class="receipt-field">
+                        <span>商品名称</span>
+                        <input v-model="item.name" :disabled="isLocked" />
+                      </label>
+                      <label class="receipt-field receipt-field-small">
+                        <span>数量</span>
+                        <input v-model.number="item.quantity" type="number" :disabled="isLocked" />
+                      </label>
+                      <label class="receipt-field">
+                        <span>存储位置</span>
+                        <input v-model="item.storageLocation" :disabled="isLocked" />
+                      </label>
+                      <label class="receipt-field receipt-field-wide">
+                        <span>备注</span>
+                        <textarea v-model="item.note" :disabled="isLocked" rows="1"></textarea>
+                      </label>
+                    </div>
+                  </article>
+                </div>
+              </template>
+            </GlassCard>
+          </section>
+
+          <aside class="receipt-sidebar">
+            <GlassCard title="确认入库" class="receipt-confirm-card">
+              <div v-if="receiptMeta.id" class="receipt-confirm-panel">
+                <div class="receipt-upload-summary">
+                  <div class="receipt-summary-item">
+                    <span>状态</span>
+                    <strong :class="statusBadgeClass">{{ statusLabel }}</strong>
+                  </div>
+                  <div class="receipt-summary-item">
+                    <span>有效商品</span>
+                    <strong>{{ validItems.length }} 条</strong>
+                  </div>
+                  <div class="receipt-summary-item">
+                    <span>同步记录</span>
+                    <strong>{{ saveStateLabel }}</strong>
+                  </div>
+                </div>
+
+                <div class="receipt-action-stack">
+                  <Button 
+                    type="button" 
+                    class="btn-full"
+                    :disabled="isLocked || confirming || !validItems.length" 
+                    @click="confirmDraft"
+                  >
+                    {{ confirming ? '确认中...' : '确认同步' }}
+                  </Button>
+                  <Button type="button" variant="secondary" :disabled="!receiptMeta.id || saving" @click="saveDraft(true)">
+                    立即保存
+                  </Button>
+                </div>
               </div>
-            </article>
-          </div>
-        </template>
-      </GlassCard>
-
-      <GlassCard title="第 3 步：确认入库">
-        <EmptyState
-          v-if="!receiptMeta.id"
-          title="等待草稿生成"
-          description="上传截图后，这里会显示确认信息和入库按钮。"
-        >
-          <template #icon>
-            <CheckIcon />
-          </template>
-        </EmptyState>
-
-        <template v-else>
-          <div class="receipt-confirm-panel">
-            <div class="receipt-confirm-stats">
-              <div class="receipt-confirm-stat">
-                <span>文件名</span>
-                <strong>{{ receiptMeta.originalFilename }}</strong>
-              </div>
-              <div class="receipt-confirm-stat">
-                <span>草稿条目</span>
-                <strong>{{ validItems.length }} 条</strong>
-              </div>
-              <div class="receipt-confirm-stat">
-                <span>状态</span>
-                <strong>{{ statusLabel }}</strong>
-              </div>
-              <div class="receipt-confirm-stat">
-                <span>自动保存</span>
-                <strong>{{ saveStateLabel }}</strong>
-              </div>
-            </div>
-
-            <div class="receipt-confirm-note">
-              <p>
-                确认后，草稿中的每一条有效商品都会写入现有库存表和交易表。此操作会生成正常的入库记录，方便后续检索和历史回溯。
-              </p>
-            </div>
-
-            <div class="form-actions">
-              <Button type="button" :disabled="isLocked || confirming || !validItems.length" @click="confirmDraft">
-                {{ confirming ? '确认中...' : '确认入库' }}
-              </Button>
-              <Button type="button" variant="secondary" :disabled="!receiptMeta.id || saving" @click="saveDraft(true)">
-                保存草稿
-              </Button>
-              <Button type="button" variant="secondary" :disabled="!receiptMeta.id" @click="refreshCurrentDraft">
-                重新加载
-              </Button>
-            </div>
-
-            <p v-if="confirmMessage" class="receipt-helper-text">{{ confirmMessage }}</p>
-          </div>
-        </template>
-      </GlassCard>
+              <EmptyState v-else title="未就绪" compact description="等待数据接入" />
+            </GlassCard>
+          </aside>
+        </div>
+      </main>
     </div>
 
     <GlassCard :title="`最近导入记录 · ${receiptImports.length} 条`">
@@ -252,6 +219,7 @@
       </DataTable>
     </GlassCard>
   </div>
+</div>
 </template>
 
 <script setup>
@@ -305,7 +273,7 @@ const importColumns = [
   { key: 'id', label: '编号' },
   { key: 'originalFilename', label: '文件名' },
   { key: 'status', label: '状态' },
-  { key: 'itemCount', label: '有效条目' },
+          { key: 'itemCount', label: '有效结果' },
   { key: 'createdAt', label: '创建时间' },
   { key: 'confirmedAt', label: '确认时间' },
   { key: 'actions', label: '操作' }
@@ -496,7 +464,7 @@ async function submitUpload(file) {
   }
 
   uploading.value = true
-  uploadMessage.value = '正在上传截图并创建导入草稿...'
+    uploadMessage.value = '正在上传截图并调用本地模型识别...'
 
   try {
     const record = await createReceiptImport(file)
@@ -640,12 +608,13 @@ watch(
     const value = Array.isArray(draftId) ? draftId[0] : draftId
     if (value) {
       await loadImport(Number(value))
-      return
+    } else {
+      resetMeta()
+      resetDraft()
+      confirmMessage.value = ''
     }
 
-    resetMeta()
-    resetDraft()
-    confirmMessage.value = ''
+    await loadImports()
   },
   { immediate: true }
 )
@@ -661,16 +630,6 @@ watch(
   },
   { deep: true }
 )
-
-watch(
-  () => route.query.draft,
-  async () => {
-    await loadImports()
-  },
-  { immediate: true }
-)
-
-loadImports()
 
 onBeforeUnmount(() => {
   clearSaveTimer()

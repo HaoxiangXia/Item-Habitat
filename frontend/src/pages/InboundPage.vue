@@ -1,14 +1,16 @@
 <template>
-  <PageHeader
-    title="货物入库"
-    subtitle="录入新货物或补充现有仓储位置"
-  >
-    <template #icon>
-      <ArrowDownIcon />
-    </template>
-  </PageHeader>
+  <div class="page-container">
+    <PageHeader
+      title="货物入库"
+      subtitle="录入新货物或补充现有仓储位置"
+    >
+      <template #icon>
+        <ArrowDownIcon />
+      </template>
+    </PageHeader>
 
-  <InboundForm />
+    <InboundForm />
+  </div>
 </template>
 
 <script setup>

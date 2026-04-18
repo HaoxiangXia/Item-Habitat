@@ -1,9 +1,10 @@
 <template>
-  <PageHeader title="库存统计" subtitle="按存储位置汇总当前库存">
-    <template #icon>
-      <MapIcon />
-    </template>
-  </PageHeader>
+  <div class="page-container">
+    <PageHeader title="库存统计" subtitle="按存储位置汇总当前库存">
+      <template #icon>
+        <MapIcon />
+      </template>
+    </PageHeader>
 
   <div class="stat-grid">
     <StatCard :value="summary.totalLocations" label="有效位置" description="当前可用的存储位置总数">
@@ -52,7 +53,8 @@
         </router-link>
       </template>
     </DataTable>
-  </GlassCard>
+    </GlassCard>
+  </div>
 </template>
 
 <script setup>

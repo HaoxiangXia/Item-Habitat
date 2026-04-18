@@ -1,12 +1,13 @@
 <template>
-  <PageHeader
-    title="历史记录"
-    subtitle="查看全部出入库交易明细"
-  >
-    <template #icon>
-      <ClockIcon />
-    </template>
-  </PageHeader>
+  <div class="page-container">
+    <PageHeader
+      title="历史记录"
+      subtitle="查看全部出入库交易明细"
+    >
+      <template #icon>
+        <ClockIcon />
+      </template>
+    </PageHeader>
 
   <GlassCard :title="`交易记录 · ${transactions.length} 条`">
     <DataTable
@@ -30,7 +31,8 @@
         <StatusIndicator :label="`${row.quantity} 件`" :status="row.type === 'IN' ? 'normal' : 'alarm'" />
       </template>
     </DataTable>
-  </GlassCard>
+    </GlassCard>
+  </div>
 </template>
 
 <script setup>

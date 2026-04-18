@@ -27,7 +27,11 @@
 
     <main class="main-content">
       <FlashMessageStack />
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <transition name="fade-transform" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </main>
   </template>
 </template>

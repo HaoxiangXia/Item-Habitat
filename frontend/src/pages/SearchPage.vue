@@ -1,12 +1,13 @@
 <template>
-  <PageHeader
-    title="货物检索"
-    subtitle="按名称、存储位置和日期范围快速筛选货物"
-  >
-    <template #icon>
-      <SearchIcon />
-    </template>
-  </PageHeader>
+  <div class="page-container">
+    <PageHeader
+      title="货物检索"
+      subtitle="按名称、存储位置和日期范围快速筛选货物"
+    >
+      <template #icon>
+        <SearchIcon />
+      </template>
+    </PageHeader>
 
   <GlassCard title="筛选条件">
     <form class="search-form" @submit.prevent>
@@ -51,7 +52,8 @@
         <span class="time-col">{{ formatDateTime(row.createdAt) }}</span>
       </template>
     </DataTable>
-  </GlassCard>
+    </GlassCard>
+  </div>
 </template>
 
 <script setup>

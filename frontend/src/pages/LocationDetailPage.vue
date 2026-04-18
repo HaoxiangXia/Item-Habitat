@@ -1,19 +1,20 @@
 <template>
-  <PageHeader
-    :title="locationName || '位置详情'"
-    subtitle="查看该存储位置下的全部货物"
-  >
-    <template #icon>
-      <LayersIcon />
-    </template>
+  <div class="page-container">
+    <PageHeader
+      :title="locationName || '位置详情'"
+      subtitle="查看该存储位置下的全部货物"
+    >
+      <template #icon>
+        <LayersIcon />
+      </template>
 
-    <template #actions>
-      <router-link to="/locations" class="nav-btn">
-        <BackIcon />
-        返回统计
-      </router-link>
-    </template>
-  </PageHeader>
+      <template #actions>
+        <router-link to="/locations" class="nav-btn">
+          <BackIcon />
+          返回统计
+        </router-link>
+      </template>
+    </PageHeader>
 
   <div class="stat-grid">
     <StatCard :value="summary.productCount" label="货物种类" description="该位置下的货物条目数">
@@ -49,8 +50,8 @@
       </template>
     </DataTable>
   </GlassCard>
-</template>
-
+  </div>
+</div>
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
