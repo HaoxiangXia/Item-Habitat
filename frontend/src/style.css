@@ -936,6 +936,11 @@ body {
     border-bottom: none;
 }
 
+.search-row-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
 /* ========== 状态指示器 ========== */
 .status-indicator {
     display: inline-flex;
@@ -1926,6 +1931,66 @@ body {
 
 .modal-body {
     padding: 24px;
+}
+
+.search-outbound-confirm {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.search-outbound-confirm-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+}
+
+.search-outbound-confirm-text strong {
+    color: var(--color-text);
+    font-weight: 700;
+}
+
+.search-outbound-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.search-outbound-summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.search-outbound-summary-item span {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    letter-spacing: 0.04em;
+}
+
+.search-outbound-summary-item strong {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.search-outbound-quantity {
+    margin-top: -2px;
+}
+
+.search-outbound-confirm-hint {
+    font-size: 13px;
+    color: var(--color-text-muted);
+}
+
+.search-outbound-actions {
+    margin-top: 4px;
+    justify-content: flex-end;
 }
 
 .page-header-actions {
