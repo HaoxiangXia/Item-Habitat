@@ -1,20 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader
-      title="购物截图导入"
-      subtitle="上传收货截图，手动校对后批量转成入库记录"
-    >
-      <template #icon>
-        <ReceiptIcon />
-      </template>
-
-      <template #actions>
-        <Button variant="secondary" type="button" @click="openPicker">选择截图</Button>
-        <router-link class="nav-btn" to="/inbound">返回入库</router-link>
-      </template>
-    </PageHeader>
-
-  <div class="receipt-import-page">
+    <div class="receipt-import-page">
     <div class="receipt-split-layout">
       <!-- 左侧：纵向 9:21 预览舞台 -->
       <aside class="receipt-preview-aside">

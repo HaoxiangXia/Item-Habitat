@@ -1,57 +1,41 @@
 <template>
   <div class="page-container">
-    <PageHeader
-      :title="locationName || '位置详情'"
-      subtitle="查看该存储位置下的全部货物"
-    >
-      <template #icon>
-        <LayersIcon />
-      </template>
+    <div class="stat-grid">
+      <StatCard :value="summary.productCount" label="货物种类" description="该位置下的货物条目数">
+        <template #icon>
+          <PackageIcon />
+        </template>
+      </StatCard>
 
-      <template #actions>
-        <router-link to="/locations" class="nav-btn">
-          <BackIcon />
-          返回统计
-        </router-link>
-      </template>
-    </PageHeader>
+      <StatCard :value="summary.totalQuantity" label="总库存" description="该位置下库存总量" tone="accent">
+        <template #icon>
+          <TrendIcon />
+        </template>
+      </StatCard>
+    </div>
 
-  <div class="stat-grid">
-    <StatCard :value="summary.productCount" label="货物种类" description="该位置下的货物条目数">
-      <template #icon>
-        <PackageIcon />
-      </template>
-    </StatCard>
+    <GlassCard :title="`货物列表 · ${products.length} 条`">
+      <DataTable
+        :columns="columns"
+        :data="products"
+        row-key="id"
+        empty-title="该存储位置暂无货物"
+        empty-description="你可以先从入库页面添加新的货物。"
+      >
+        <template #quantity="{ row }">
+          <StatusIndicator
+            :label="`${row.quantity} 件`"
+            :status="row.quantity === 0 ? 'alarm' : row.quantity < 10 ? 'alarm' : 'normal'"
+          />
+        </template>
 
-    <StatCard :value="summary.totalQuantity" label="总库存" description="该位置下库存总量" tone="accent">
-      <template #icon>
-        <TrendIcon />
-      </template>
-    </StatCard>
+        <template #createdAt="{ row }">
+          <span class="time-col">{{ formatDateTime(row.createdAt) }}</span>
+        </template>
+      </DataTable>
+    </GlassCard>
   </div>
-
-  <GlassCard :title="`货物列表 · ${products.length} 条`">
-    <DataTable
-      :columns="columns"
-      :data="products"
-      row-key="id"
-      empty-title="该存储位置暂无货物"
-      empty-description="你可以先从入库页面添加新的货物。"
-    >
-      <template #quantity="{ row }">
-        <StatusIndicator
-          :label="`${row.quantity} 件`"
-          :status="row.quantity === 0 ? 'alarm' : row.quantity < 10 ? 'alarm' : 'normal'"
-        />
-      </template>
-
-      <template #createdAt="{ row }">
-        <span class="time-col">{{ formatDateTime(row.createdAt) }}</span>
-      </template>
-    </DataTable>
-  </GlassCard>
-  </div>
-</div>
+</template>
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
