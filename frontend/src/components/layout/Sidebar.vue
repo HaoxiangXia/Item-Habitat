@@ -5,8 +5,10 @@
 
   <aside class="sidebar" :class="{ open: ui.sidebarOpen }">
     <div class="sidebar-brand">
-      <div class="sidebar-logo">H</div>
-      <div class="sidebar-title">栖物志</div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-title">栖物志</div>
+        <div class="sidebar-subtitle">给每件物品一个清晰、可追踪的栖息地</div>
+      </div>
     </div>
 
     <ul class="sidebar-menu">
@@ -37,7 +39,7 @@
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUiStore } from '../../stores/ui.store'
-import { HomeIcon, ArrowDownIcon, ArrowUpIcon, SearchIcon, ClockIcon, MapIcon, MenuIcon, ReceiptIcon } from '../icons'
+import { HomeIcon, ArrowDownIcon, ArrowUpIcon, SearchIcon, ClockIcon, MapIcon, MenuIcon, ReceiptIcon, LayersIcon } from '../icons'
 
 export default {
   name: 'Sidebar',
@@ -48,10 +50,9 @@ export default {
 
     const menuItems = [
       { path: '/', label: '首页', icon: HomeIcon },
-      { path: '/inbound', label: '入库', icon: ArrowDownIcon },
-      { path: '/outbound', label: '出库', icon: ArrowUpIcon },
-      { path: '/search', label: '检索', icon: SearchIcon },
-      { path: '/history', label: '历史', icon: ClockIcon },
+      { path: '/migration', label: '栖息/迁徙', icon: ArrowDownIcon },
+      { path: '/board', label: '看板', icon: LayersIcon },
+      { path: '/history', label: '历史记录', icon: ClockIcon },
       { path: '/locations', label: '库存统计', icon: MapIcon },
       { path: '/receipt-imports', label: '截图导入', icon: ReceiptIcon },
     ]
@@ -120,13 +121,14 @@ export default {
   align-items: center;
   gap: 12px;
   padding: 0 12px;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 .sidebar-logo {
+  flex-shrink: 0;
   width: 36px;
   height: 36px;
-  background: var(--color-brand);
+  background: var(--gradient-brand); /* 这里假设有 gradient-brand 或沿用颜色 */
   color: white;
   border-radius: 10px;
   display: flex;
@@ -137,12 +139,27 @@ export default {
   font-size: 20px;
 }
 
+.sidebar-brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .sidebar-title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   color: var(--color-text);
   letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.sidebar-subtitle {
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+  line-height: 1.3;
+  opacity: 0.8;
+  max-width: 140px;
 }
 
 .sidebar-menu {

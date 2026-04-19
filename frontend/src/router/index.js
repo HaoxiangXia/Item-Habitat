@@ -8,22 +8,16 @@ const routes = [
     meta: { title: '首页' }
   },
   {
-    path: '/inbound',
-    name: 'Inbound',
-    component: () => import('../pages/InboundPage.vue'),
-    meta: { title: '货物入库' }
+    path: '/migration',
+    name: 'Migration',
+    component: () => import('../pages/MigrationPage.vue'),
+    meta: { title: '栖息/迁徙' }
   },
   {
-    path: '/outbound',
-    name: 'Outbound',
-    component: () => import('../pages/OutboundPage.vue'),
-    meta: { title: '货物出库' }
-  },
-  {
-    path: '/search',
-    name: 'Search',
-    component: () => import('../pages/SearchPage.vue'),
-    meta: { title: '货物检索' }
+    path: '/board',
+    name: 'Board',
+    component: () => import('../pages/BoardPage.vue'),
+    meta: { title: '看板' }
   },
   {
     path: '/history',
@@ -62,7 +56,7 @@ const router = createRouter({
 })
 
 router.afterEach((to) => {
-  const suffix = to.meta?.title ? `${to.meta.title} - 仓储管理系统` : '仓储管理系统'
+  const suffix = to.meta?.title ? `${to.meta.title} - 栖物志` : '栖物志'
   document.title = suffix
 })
 
