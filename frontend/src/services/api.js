@@ -88,6 +88,19 @@ export function checkProduct(name) {
   })
 }
 
+export function updateProduct(id, payload) {
+  return request(`/products/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload)
+  })
+}
+
+export function deleteProduct(id) {
+  return request(`/products/${id}`, {
+    method: 'DELETE'
+  })
+}
+
 export function createReceiptImport(file) {
   const formData = new FormData()
   formData.append('file', file)

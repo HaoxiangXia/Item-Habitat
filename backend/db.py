@@ -297,6 +297,56 @@ def outbound_product(product_id: int, quantity: int, note: str = "") -> Tuple[bo
             return False, f"操作失败: {exc}"
 
 
+def delete_product(product_id: int) -> Tuple[bool, str]:
+    with connection() as conn:
+        try:
+            cursor = conn.cursor()
+            # 级联删除相关的交易记录
+            cursor.execute("DELETE FROM transactions WHERE product_id = ?", (product_id,))
+            cursor.execute("DELETE FROM products WHERE id = ?", (product_id,))
+            conn.commit()
+            return True, "货物已删除"
+        except Exception as exc:
+            conn.rollback()
+            return False, f"删除失败: {exc}"
+
+
+def update_product(
+    product_id: int, 
+    name: str = None, 
+    quantity: int = None, 
+    storage_location: str = None,
+    # note 存放在 transactions 或者作为 metadata，当前 products 表没有 note 字段
+    # 为了简化，只更新 products 表已有字段
+) -> Tuple[bool, str]:
+    with connection() as conn:
+        try:
+            cursor = conn.cursor()
+            updates = []
+            params = []
+            if name is not None:
+                updates.append("name = ?")
+                params.append(name)
+            if quantity is not None:
+                updates.append("quantity = ?")
+                params.append(quantity)
+            if storage_location is not None:
+                updates.append("storage_location = ?")
+                params.append(storage_location)
+            
+            if not updates:
+                return True, "没有需要更新的内容"
+            
+            params.append(product_id)
+            query = f"UPDATE products SET {', '.join(updates)} WHERE id = ?"
+            cursor.execute(query, params)
+            conn.commit()
+            return True, "货物信息已更新"
+        except Exception as exc:
+            conn.rollback()
+            return False, f"更新失败: {exc}"
+
+
 def search_products(
     name_keyword: str = "",
     storage_location: str = "",

@@ -59,6 +59,12 @@ class CheckProductRequest(BaseModel):
     name: str = Field(default="")
 
 
+class ProductUpdate(BaseModel):
+    name: Optional[str] = None
+    quantity: Optional[int] = None
+    storageLocation: Optional[str] = None
+
+
 class ReceiptImportItemUpdate(BaseModel):
     name: str = Field(default="")
     quantity: int = Field(default=1, ge=1)
@@ -381,6 +387,27 @@ def get_product(product_id: int) -> dict:
     if not product:
         raise HTTPException(status_code=404, detail="货物不存在")
     return product
+
+
+@app.patch("/api/products/{product_id}")
+def update_product(product_id: int, payload: ProductUpdate) -> dict:
+    success, message = db.update_product(
+        product_id,
+        name=payload.name,
+        quantity=payload.quantity,
+        storage_location=payload.storageLocation,
+    )
+    if not success:
+        raise HTTPException(status_code=400, detail=message)
+    return {"success": success, "message": message}
+
+
+@app.delete("/api/products/{product_id}")
+def delete_product(product_id: int) -> dict:
+    success, message = db.delete_product(product_id)
+    if not success:
+        raise HTTPException(status_code=400, detail=message)
+    return {"success": success, "message": message}
 
 
 @app.get("/api/storage-locations")

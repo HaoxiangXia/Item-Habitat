@@ -5,7 +5,9 @@ import {
   createInbound,
   createOutbound,
   createStorageLocation,
-  getBootstrap
+  getBootstrap,
+  updateProduct,
+  deleteProduct
 } from '../services/api'
 import { normalizeText } from '../utils/format'
 
@@ -245,6 +247,26 @@ export const useInventoryStore = defineStore('inventory', () => {
     return checkProduct(normalizeText(name))
   }
 
+  async function updateProductInfo(id, payload) {
+    try {
+      const result = await updateProduct(id, payload)
+      await refresh()
+      return { success: true, message: result.message || '更新成功' }
+    } catch (error) {
+      return { success: false, message: error instanceof Error ? error.message : '更新失败' }
+    }
+  }
+
+  async function removeProduct(id) {
+    try {
+      const result = await deleteProduct(id)
+      await refresh()
+      return { success: true, message: result.message || '删除成功' }
+    } catch (error) {
+      return { success: false, message: error instanceof Error ? error.message : '删除失败' }
+    }
+  }
+
   loadBootstrap()
 
   return {
@@ -270,6 +292,8 @@ export const useInventoryStore = defineStore('inventory', () => {
     getProductsByLocation,
     getLocationSummary,
     searchProducts,
-    checkProductByName
+    checkProductByName,
+    updateProductInfo,
+    removeProduct
   }
 })
