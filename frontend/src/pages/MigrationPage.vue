@@ -174,149 +174,21 @@ const handleOutbound = async () => {
     grid-template-columns: 1fr;
   }
 }
-</style><template>
-  <div class="page-container">
-    <div class="migration-grid">
-      <div class="migration-column">
-        <h2 class="view-title">栖息</h2>
-        <GlassCard>
-          <form class="form" @submit.prevent="handleInbound">
-            <InputField v-model="inbound.name" label="物品名称" required placeholder="请输入物品名称" />
-            <InputField v-model="inbound.quantity" type="number" label="数量" min="1" required />
-            <SelectField
-              v-model="inbound.storageLocation"
-              label="存储空间"
-              :options="locationOptions"
-              option-label-key="name"
-              option-value-key="name"
-              placeholder="请选择存储空间"
-            />
-            <TextareaField v-model="inbound.note" label="备注" rows="3" placeholder="可选备注信息" />
-            <div class="form-actions">
-              <Button type="submit">确认栖息</Button>
-            </div>
-          </form>
-        </GlassCard>
-      </div>
-
-      <div class="migration-column">
-        <h2 class="view-title">迁徙</h2>
-        <GlassCard>
-          <form class="form" @submit.prevent="handleOutbound">
-            <SelectField
-              v-model="outbound.productId"
-              label="物品名称"
-              required
-              :options="productOptions"
-              placeholder="请选择物品"
-              option-label-key="label"
-              option-value-key="value"
-            />
-            <InputField v-model="outbound.quantity" type="number" label="数量" min="1" required />
-            <TextareaField v-model="outbound.note" label="备注" rows="3" placeholder="可选备注信息" />
-            <div class="form-actions">
-              <Button type="submit" :disabled="!outbound.productId">确认迁徙</Button>
-            </div>
-          </form>
-        </GlassCard>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script setup>
-import { reactive, computed } from 'vue'
-import { useInventoryStore } from '../stores/inventory.store'
-import { useUiStore } from '../stores/ui.store'
-import GlassCard from '../components/layout/GlassCard.vue'
-import InputField from '../components/ui/Input.vue'
-import SelectField from '../components/ui/Select.vue'
-import TextareaField from '../components/ui/Textarea.vue'
-import Button from '../components/ui/Button.vue'
-
-const inventory = useInventoryStore()
-const ui = useUiStore()
-
-const inbound = reactive({
-  name: '',
-  quantity: 1,
-  storageLocation: '',
-  note: ''
-})
-
-const outbound = reactive({
-  productId: null,
-  quantity: 1,
-  note: ''
-})
-
-const locationOptions = computed(() => inventory.locationOptions)
-const productOptions = computed(() => 
-  inventory.products.map(p => ({
-    label: `${p.name} (${p.storageLocation || '无位置'})`,
-    value: p.id
-  }))
-)
-
-const handleInbound = async () => {
-  try {
-    const success = await inventory.inbound(inbound)
-    if (success) {
-      ui.showFlash('栖息成功', 'success')
-      Object.assign(inbound, { name: '', quantity: 1, storageLocation: '', note: '' })
-    }
-  } catch (err) {
-    ui.showFlash('栖息失败', 'error')
-  }
-}
-
-const handleOutbound = async () => {
-  try {
-    const success = await inventory.outbound(outbound)
-    if (success) {
-      ui.showFlash('迁徙成功', 'success')
-      Object.assign(outbound, { productId: null, quantity: 1, note: '' })
-    }
-  } catch (err) {
-    ui.showFlash('迁徙失败', 'error')
-  }
-}
-</script>
-
-<style scoped>
-.migration-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
-  align-items: start;
-}
-
-.migration-column {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.view-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--color-text);
-  margin-bottom: 8px;
+</style>
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
-.form-actions {
-  margin-top: 8px;
+.full-width {
+  width: 100%;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 800px) {
   .migration-grid {
     grid-template-columns: 1fr;
   }
 }
-</style>
