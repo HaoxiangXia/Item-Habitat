@@ -45,3 +45,16 @@ npm run build
 - 前端通过 `/api` 请求后端，开发环境下由 Vite 代理到 `http://127.0.0.1:8000`
 - 后端会自动创建数据库和上传目录
 - 现有 SQLite 数据库 `warehouse.db` 是历史数据源，修改前请注意兼容性
+
+## LM Studio 接入
+
+如果你本地已经用 LM Studio 跑起了多模态模型，上传购物截图后，后端会自动调用它做 OCR 和商品关键词提取。
+
+可用环境变量：
+
+- `LM_STUDIO_BASE_URL`：LM Studio 的 OpenAI 兼容接口地址，默认 `http://127.0.0.1:1234/v1`
+- `LM_STUDIO_MODEL`：模型名称；如果不填，后端会尝试从 `/v1/models` 自动读取
+- `LM_STUDIO_API_KEY`：如果你在 LM Studio 里启用了密钥校验，可以填这里
+- `LM_STUDIO_TIMEOUT`：模型请求超时时间，默认 `60`
+
+如果本地模型暂时不可用，系统会自动降级成可编辑的手动草稿，不会阻断上传流程。
