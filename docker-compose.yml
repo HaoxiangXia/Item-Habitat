@@ -1,0 +1,26 @@
+services:
+  backend:
+    image: item-habitat-backend:2026.04.26
+    container_name: item-habitat-backend
+    environment:
+      WAREHOUSE_DB_PATH: /data/warehouse.db
+      WAREHOUSE_UPLOAD_DIR: /uploads
+      # 可选：接入本地或远程 LM Studio
+      # LM_STUDIO_BASE_URL: http://host.docker.internal:1234/v1
+      # LM_STUDIO_MODEL: unsloth/gemma-4-e4b-it
+      # LM_STUDIO_API_KEY: ""
+      # LM_STUDIO_TIMEOUT: "60"
+    volumes:
+      - ./warehouse.db:/data/warehouse.db
+      - ./uploads:/uploads
+    restart: unless-stopped
+
+  frontend:
+    image: item-habitat-frontend:2026.04.26
+    container_name: item-habitat-frontend
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+

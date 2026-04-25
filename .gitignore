@@ -56,6 +56,9 @@ desktop.ini
 # 日志文件
 *.log
 
+# Docker 导出镜像包
+*.tar
+
 # 环境变量文件
 .env
 .env.local
@@ -99,4 +102,3 @@ uploads/receipt-imports/
 AGENTS.md
 .github/
 .agents/
-tests/

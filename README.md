@@ -17,6 +17,23 @@
 
 ## 启动方式
 
+### 容器化一键部署（推荐）
+
+项目已支持 Docker Compose 一键启动前后端：
+
+```bash
+docker compose up -d
+```
+
+启动后访问：`http://localhost:8080`
+
+详细的容器化与服务器部署说明请参考：
+- [Docker Compose 部署指南](docs/docker-compose.md)
+- [前端容器化说明](docs/docker-frontend.md)
+- [后端容器化说明](docs/docker-backend.md)
+
+### 本地开发启动
+
 后端：
 
 ```powershell

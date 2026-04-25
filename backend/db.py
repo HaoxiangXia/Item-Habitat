@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 from contextlib import contextmanager
 from pathlib import Path
@@ -8,7 +9,7 @@ from typing import Any, Dict, Generator, List, Optional, Tuple
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DB_PATH = BASE_DIR / "warehouse.db"
+DB_PATH = Path(os.getenv("WAREHOUSE_DB_PATH", str(BASE_DIR / "warehouse.db"))).expanduser().resolve()
 SCHEMA_PATH = Path(__file__).resolve().parent / "schema.sql"
 
 

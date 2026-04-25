@@ -41,19 +41,9 @@ logs/
 Thumbs.db
 desktop.ini
 
-# Documentation
-README.md
-ui-design-guide.md
-
-# Docker
-Dockerfile
-.dockerignore
-
 # Test
 .pytest/
 .coverage
 htmlcov/
 
 # Misc
-*.md
-!requirements.txt
