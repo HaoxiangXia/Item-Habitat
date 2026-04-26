@@ -54,6 +54,7 @@ export default {
       { path: '/board', label: '看板', icon: LayersIcon },
       { path: '/history', label: '历史记录', icon: ClockIcon },
       { path: '/locations', label: '库存统计', icon: MapIcon },
+      { path: '/map', label: '地图', icon: MapIcon },
       { path: '/receipt-imports', label: '截图导入', icon: ReceiptIcon },
     ]
 

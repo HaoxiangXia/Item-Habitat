@@ -32,6 +32,12 @@ const routes = [
     meta: { title: '库存统计' }
   },
   {
+    path: '/map',
+    name: 'Map',
+    component: () => import('../pages/MapPage.vue'),
+    meta: { title: '地图' }
+  },
+  {
     path: '/receipt-imports',
     name: 'ReceiptImports',
     component: () => import('../pages/ReceiptImportPage.vue'),
