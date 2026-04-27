@@ -1,6 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '../stores/auth.store'
 
 const routes = [
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('../pages/LoginPage.vue'),
+    meta: { title: '登录', public: true }
+  },
   {
     path: '/',
     name: 'Home',
@@ -59,6 +66,17 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const auth = useAuthStore()
+  if (!to.meta.public && !auth.isAuthenticated) {
+    next('/login')
+  } else if (to.name === 'Login' && auth.isAuthenticated) {
+    next('/')
+  } else {
+    next()
+  }
 })
 
 router.afterEach((to) => {

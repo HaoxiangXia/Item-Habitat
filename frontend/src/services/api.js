@@ -28,6 +28,13 @@ async function request(path, options = {}) {
   return data
 }
 
+export function login(username, password) {
+  return request('/login', {
+    method: 'POST',
+    body: JSON.stringify({ username, password })
+  })
+}
+
 export function getBootstrap() {
   return request('/bootstrap')
 }

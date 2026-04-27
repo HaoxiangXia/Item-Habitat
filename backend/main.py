@@ -65,6 +65,11 @@ class ProductUpdate(BaseModel):
     storageLocation: Optional[str] = None
 
 
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+
 class ReceiptImportItemUpdate(BaseModel):
     name: str = Field(default="")
     quantity: int = Field(default=1, ge=1)
@@ -359,6 +364,21 @@ async def _store_receipt_image(file: UploadFile) -> dict:
 @app.get("/api/health")
 def health() -> dict:
     return {"status": "ok"}
+
+
+@app.post("/api/login")
+def login(payload: LoginRequest) -> dict:
+    # 按照需求：默认用户名和密码均设为“admin”
+    if payload.username == "admin" and payload.password == "admin":
+        return {
+            "token": "mock-token-admin",
+            "user": {
+                "username": "admin",
+                "role": "管理员",
+                "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=admin"
+            }
+        }
+    raise HTTPException(status_code=401, detail="用户名或密码错误")
 
 
 @app.get("/api/bootstrap")
