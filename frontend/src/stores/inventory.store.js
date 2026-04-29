@@ -169,6 +169,7 @@ export const useInventoryStore = defineStore('inventory', () => {
   async function outboundProduct(payload) {
     const productId = Number.parseInt(payload?.productId, 10)
     const quantity = normalizeQuantity(payload?.quantity)
+    const targetLocation = normalizeText(payload?.targetLocation)
     const note = normalizeText(payload?.note)
 
     if (!productId) {
@@ -179,6 +180,7 @@ export const useInventoryStore = defineStore('inventory', () => {
       const result = await createOutbound({
         productId,
         quantity,
+        targetLocation,
         note
       })
       await refresh()

@@ -52,6 +52,7 @@ class InboundCreate(BaseModel):
 class OutboundCreate(BaseModel):
     productId: int = Field(ge=1)
     quantity: int = Field(default=1, ge=1)
+    targetLocation: str = ""
     note: str = ""
 
 
@@ -508,6 +509,7 @@ def outbound(payload: OutboundCreate) -> dict:
         payload.productId,
         payload.quantity,
         payload.note.strip(),
+        payload.targetLocation.strip(),
     )
     if not success:
         raise HTTPException(status_code=400, detail=message)

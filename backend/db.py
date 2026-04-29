@@ -103,6 +103,10 @@ def ensure_db() -> None:
         ):
             _ensure_schema(conn)
 
+        if "transactions" in tables and "target_location" not in _table_columns(conn, "transactions"):
+            conn.execute("ALTER TABLE transactions ADD COLUMN target_location TEXT")
+            conn.commit()
+
 
 def serialize_product(row: sqlite3.Row) -> Dict[str, object]:
     return {
@@ -116,6 +120,7 @@ def serialize_product(row: sqlite3.Row) -> Dict[str, object]:
 
 def serialize_transaction(row: sqlite3.Row) -> Dict[str, object]:
     storage_location = row["storage_location"] if "storage_location" in row.keys() else ""
+    target_location = row["target_location"] if "target_location" in row.keys() else ""
     return {
         "id": row["id"],
         "productId": row["product_id"],
@@ -124,6 +129,7 @@ def serialize_transaction(row: sqlite3.Row) -> Dict[str, object]:
         "quantity": row["quantity"],
         "note": row["note"] or "",
         "storageLocation": storage_location or "",
+        "targetLocation": target_location or "",
         "createdAt": row["created_at"],
     }
 
@@ -272,7 +278,12 @@ def create_product(name: str, quantity: int, storage_location: str, note: str = 
             return False, f"操作失败: {exc}", None
 
 
-def outbound_product(product_id: int, quantity: int, note: str = "") -> Tuple[bool, str]:
+def outbound_product(
+    product_id: int,
+    quantity: int,
+    note: str = "",
+    target_location: str = "",
+) -> Tuple[bool, str]:
     with connection() as conn:
         try:
             cursor = conn.cursor()
@@ -288,8 +299,8 @@ def outbound_product(product_id: int, quantity: int, note: str = "") -> Tuple[bo
             new_quantity = product["quantity"] - quantity
             cursor.execute("UPDATE products SET quantity = ? WHERE id = ?", (new_quantity, product_id))
             cursor.execute(
-                "INSERT INTO transactions (product_id, type, quantity, note) VALUES (?, 'OUT', ?, ?)",
-                (product_id, quantity, note),
+                "INSERT INTO transactions (product_id, type, quantity, note, target_location) VALUES (?, 'OUT', ?, ?, ?)",
+                (product_id, quantity, note, target_location),
             )
             conn.commit()
             return True, f"货物 {product['name']} 出库 {quantity} 件成功"
@@ -386,7 +397,7 @@ def get_all_transactions() -> List[Dict[str, object]]:
     with connection() as conn:
         rows = conn.execute(
             """
-            SELECT t.id, t.product_id, t.type, t.quantity, t.note, t.created_at,
+            SELECT t.id, t.product_id, t.type, t.quantity, t.note, t.target_location, t.created_at,
                    p.name AS product_name, p.storage_location
             FROM transactions t
             JOIN products p ON t.product_id = p.id
