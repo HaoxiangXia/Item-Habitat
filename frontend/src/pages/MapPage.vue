@@ -98,15 +98,20 @@ export default {
       note: i === 0 ? '我的秘密基地' : i === 1 ? '工作区一角' : '这是照片备注'
     }))
 
-    const getPolaroidStyle = (index) => {
-      // 随机旋转
+    const polaroidStyles = photos.map(() => {
       const rotation = (Math.random() * 12 - 6).toFixed(1)
-      // 随机尺寸
       const scale = (0.85 + Math.random() * 0.15).toFixed(2)
-      
+
       return {
         transform: `rotate(${rotation}deg) scale(${scale})`,
         zIndex: Math.floor(Math.random() * 10)
+      }
+    })
+
+    const getPolaroidStyle = (index) => {
+      return polaroidStyles[index] || {
+        transform: 'rotate(0deg) scale(1)',
+        zIndex: 0
       }
     }
 
