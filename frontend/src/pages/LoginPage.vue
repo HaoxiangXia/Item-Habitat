@@ -89,18 +89,22 @@ const handleLogin = async () => {
   try {
     const result = await auth.login(username.value, password.value)
     if (result.success) {
-      ui.showFlash('欢迎回来，' + auth.user.username, 'success')
-      // 强制强制使用 window.location.href 跳转以确保状态彻底刷新（可选，router.push 通常也行）
-      // 但这里我们还是优先使用 vue-router 并确保逻辑正确
+      if (ui.success) {
+        ui.success('欢迎回来，' + auth.user.username)
+      }
       await router.push('/')
     } else {
       error.value = result.message
-      ui.showFlash(result.message, 'error')
+      if (ui.error) {
+        ui.error(result.message)
+      }
     }
   } catch (err) {
     console.error('Login error:', err)
     error.value = '服务器连接失败'
-    ui.showFlash('登录出错，请稍后再试', 'error')
+    if (ui.error) {
+      ui.error('登录出错，请稍后再试')
+    }
   } finally {
     loading.value = false
   }

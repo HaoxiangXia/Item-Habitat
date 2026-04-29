@@ -55,10 +55,23 @@ import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUiStore } from '../../stores/ui.store'
 import { useAuthStore } from '../../stores/auth.store'
-import { HomeIcon, ArrowDownIcon, ArrowUpIcon, SearchIcon, ClockIcon, MapIcon, MenuIcon, ReceiptIcon, LayersIcon } from '../icons'
+import { 
+  HomeIcon, 
+  ArrowDownIcon, 
+  ArrowUpIcon, 
+  SearchIcon, 
+  ClockIcon, 
+  MapIcon, 
+  MenuIcon, 
+  ReceiptIcon, 
+  LayersIcon 
+} from '../icons'
 
 export default {
   name: 'Sidebar',
+  components: {
+    MenuIcon
+  },
   setup() {
     const ui = useUiStore()
     const auth = useAuthStore()
@@ -92,7 +105,9 @@ export default {
     const handleLogout = () => {
       auth.logout()
       router.push('/login')
-      ui.showFlash('已安全退出登录', 'info')
+      if (ui.pushFlash) {
+        ui.pushFlash('info', '已安全退出登录')
+      }
     }
 
     onMounted(() => {
