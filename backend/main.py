@@ -52,6 +52,7 @@ class InboundCreate(BaseModel):
 class OutboundCreate(BaseModel):
     productId: int = Field(ge=1)
     quantity: int = Field(default=1, ge=1)
+    targetLocation: str = ""
     note: str = ""
 
 
@@ -63,6 +64,11 @@ class ProductUpdate(BaseModel):
     name: Optional[str] = None
     quantity: Optional[int] = None
     storageLocation: Optional[str] = None
+
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
 
 
 class ReceiptImportItemUpdate(BaseModel):
@@ -361,6 +367,21 @@ def health() -> dict:
     return {"status": "ok"}
 
 
+@app.post("/api/login")
+def login(payload: LoginRequest) -> dict:
+    # 按照需求：默认用户名和密码均设为“admin”
+    if payload.username == "admin" and payload.password == "admin":
+        return {
+            "token": "mock-token-admin",
+            "user": {
+                "username": "admin",
+                "role": "管理员",
+                "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=admin"
+            }
+        }
+    raise HTTPException(status_code=401, detail="用户名或密码错误")
+
+
 @app.get("/api/bootstrap")
 def bootstrap() -> dict:
     return {
@@ -488,6 +509,7 @@ def outbound(payload: OutboundCreate) -> dict:
         payload.productId,
         payload.quantity,
         payload.note.strip(),
+        payload.targetLocation.strip(),
     )
     if not success:
         raise HTTPException(status_code=400, detail=message)

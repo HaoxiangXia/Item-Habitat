@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS transactions (
     type TEXT NOT NULL CHECK(type IN ('IN', 'OUT')),
     quantity INTEGER NOT NULL,
     note TEXT,
+    target_location TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (product_id) REFERENCES products(id)
 );

@@ -1,6 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '../stores/auth.store'
 
 const routes = [
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('../pages/LoginPage.vue'),
+    meta: { title: '登录', public: true }
+  },
   {
     path: '/',
     name: 'Home',
@@ -32,6 +39,12 @@ const routes = [
     meta: { title: '库存统计' }
   },
   {
+    path: '/map',
+    name: 'Map',
+    component: () => import('../pages/MapPage.vue'),
+    meta: { title: '地图' }
+  },
+  {
     path: '/receipt-imports',
     name: 'ReceiptImports',
     component: () => import('../pages/ReceiptImportPage.vue'),
@@ -53,6 +66,16 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+router.beforeEach((to, from) => {
+  const auth = useAuthStore()
+  if (!to.meta.public && !auth.isAuthenticated) {
+    return '/login'
+  }
+  if (to.name === 'Login' && auth.isAuthenticated) {
+    return '/'
+  }
 })
 
 router.afterEach((to) => {
