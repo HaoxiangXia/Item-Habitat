@@ -3,16 +3,21 @@ import { h } from 'vue'
 const createIcon = (svgPaths, viewBox = "0 0 24 24") => {
   return {
     render() {
-      return h('svg', {
+      const attrs = this.$attrs || {}
+      const { size, ...restAttrs } = attrs
+      const svgProps = {
         viewBox,
-        width: "24",
-        height: "24",
+        width: size || "24",
+        height: size || "24",
         fill: "none",
         stroke: "currentColor",
         "stroke-width": "2",
         "stroke-linecap": "round",
-        "stroke-linejoin": "round"
-      }, svgPaths)
+        "stroke-linejoin": "round",
+        ...restAttrs
+      }
+
+      return h('svg', svgProps, svgPaths)
     }
   }
 }
