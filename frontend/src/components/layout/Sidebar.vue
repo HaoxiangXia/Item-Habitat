@@ -28,11 +28,11 @@
     </ul>
 
     <div class="sidebar-footer">
-      <div v-if="auth.isAuthenticated" class="user-info">
-        <img :src="auth.user.avatar" alt="User Avatar" class="user-avatar" />
+      <div v-if="auth.isAuthenticated && auth.user" class="user-info">
+        <img :src="auth.user?.avatar || ''" alt="User Avatar" class="user-avatar" />
         <div class="user-details">
-          <div class="user-name">{{ auth.user.username }}</div>
-          <div class="user-role">{{ auth.user.role }}</div>
+          <div class="user-name">{{ auth.user?.username || '未命名用户' }}</div>
+          <div class="user-role">{{ auth.user?.role || '' }}</div>
         </div>
         <button class="logout-btn" title="退出登录" @click="handleLogout">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
