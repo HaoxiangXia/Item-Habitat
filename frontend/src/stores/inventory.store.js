@@ -167,7 +167,7 @@ export const useInventoryStore = defineStore('inventory', () => {
   }
 
   async function outboundProduct(payload) {
-    const productId = Number.parseInt(payload?.productId, 10)
+    const productId = normalizeText(payload?.productId)
     const quantity = normalizeQuantity(payload?.quantity)
     const targetLocation = normalizeText(payload?.targetLocation)
     const note = normalizeText(payload?.note)
@@ -194,8 +194,8 @@ export const useInventoryStore = defineStore('inventory', () => {
   }
 
   function getProductById(productId) {
-    const id = Number.parseInt(productId, 10)
-    return products.value.find((product) => product.id === id) || null
+    const id = normalizeText(productId)
+    return products.value.find((product) => String(product.id) === id) || null
   }
 
   function getProductsByLocation(locationName) {

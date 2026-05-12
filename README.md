@@ -2,18 +2,32 @@
 
 栖物志是一个面向大学生的 AI 轻量化物品管理系统，目标是给每件物品一个清晰、可追踪、可检索的栖息地。
 
+核心概念：**物品（Items）** 归属于 **空间（Spaces）**，通过 **看板（Board）** 管理状态流转，搭配 **购物截图导入（Receipt Import）** 与 **操作日志（Logs）** 实现全链路追踪。
+
 ## 技术栈
 
 - 后端：FastAPI + SQLite
 - 前端：Vue 3 + Vite + Pinia + Vue Router
-- 测试：`tests/test_receipt_imports.py`
 
 ## 目录说明
 
-- `backend/`：FastAPI 后端与数据库访问
+- `backend/`：FastAPI 后端，包含 `main.py`（路由）、`db.py`（数据库访问）、`schema.sql`（数据表定义）
 - `frontend/`：Vue 3 前端应用
-- `uploads/receipt-imports/`：收据导入图片存放目录
-- `static/`、`templates/`：历史实现，当前新功能优先使用 `frontend/`
+- `run_migration.py`：从旧版数据库（products/transactions/storage_locations）向新版模型（items/spaces/categories/logs）的迁移脚本
+- `uploads/receipt-imports/`：购物截图上传存放目录
+- `docs/`：容器化部署与 PRD 文档
+
+## 核心功能
+
+| 功能 | 说明 |
+|------|------|
+| **物品管理** | 物品的增删改查、标签、截止时间、状态（pending/stored/taken/archived） |
+| **空间地图** | 储物空间以网格卡片展示，支持实景照片与提示语 |
+| **状态看板** | 两列看板（待整理/已归位），支持拖拽切换状态 |
+| **操作日志** | 所有出入库、移动、状态变更操作自动记录 |
+| **购物截图导入** | 上传截图，后端调用 LM Studio 多模态模型做 OCR 识别，自动提取商品信息 |
+| **库存统计** | 按空间维度统计物品数量与分布 |
+| **登录认证** | 基于简单认证，保护个人数据 |
 
 ## 启动方式
 
@@ -57,11 +71,19 @@ cd frontend
 npm run build
 ```
 
+## 数据库迁移
+
+如果从旧版本升级（旧表：`products`、`transactions`、`storage_locations`），需运行迁移脚本将数据平滑迁移至新版模型：
+
+```powershell
+uv run run_migration.py
+```
+
 ## 说明
 
 - 前端通过 `/api` 请求后端，开发环境下由 Vite 代理到 `http://127.0.0.1:8000`
-- 后端会自动创建数据库和上传目录
-- 现有 SQLite 数据库 `warehouse.db` 是历史数据源，修改前请注意兼容性
+- 后端首次启动时自动创建数据库和上传目录
+- 默认登录账号：`admin` / `admin`
 
 ## LM Studio 接入
 
@@ -75,3 +97,10 @@ npm run build
 - `LM_STUDIO_TIMEOUT`：模型请求超时时间，默认 `60`
 
 如果本地模型暂时不可用，系统会自动降级成可编辑的手动草稿，不会阻断上传流程。
+
+## 环境变量
+
+| 变量 | 说明 | 默认值 |
+|------|------|--------|
+| `WAREHOUSE_DB_PATH` | 数据库文件路径 | `warehouse.db` |
+| `WAREHOUSE_UPLOAD_DIR` | 上传文件根目录 | `uploads/` |
