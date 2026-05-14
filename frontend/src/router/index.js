@@ -27,6 +27,12 @@ const routes = [
     meta: { title: '看板' }
   },
   {
+    path: '/items',
+    name: 'ItemLibrary',
+    component: () => import('../pages/ItemLibraryPage.vue'),
+    meta: { title: '物品库' }
+  },
+  {
     path: '/history',
     name: 'History',
     component: () => import('../pages/HistoryPage.vue'),

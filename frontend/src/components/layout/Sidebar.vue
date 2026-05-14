@@ -64,7 +64,8 @@ import {
   MapIcon, 
   MenuIcon, 
   ReceiptIcon, 
-  LayersIcon 
+  LayersIcon,
+  PackageIcon
 } from '../icons'
 
 export default {
@@ -83,6 +84,7 @@ export default {
       { path: '/', label: '首页', icon: HomeIcon },
       { path: '/migration', label: '栖息/迁徙', icon: ArrowDownIcon },
       { path: '/board', label: '看板', icon: LayersIcon },
+      { path: '/items', label: '物品库', icon: PackageIcon },
       { path: '/history', label: '历史记录', icon: ClockIcon },
       { path: '/locations', label: '库存统计', icon: MapIcon },
       { path: '/map', label: '地图', icon: MapIcon },
