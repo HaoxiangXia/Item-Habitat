@@ -51,7 +51,7 @@ docker compose up -d
 后端：
 
 ```powershell
-uv run backend/main.py
+uv run python -m backend.main
 ```
 
 前端：
@@ -76,7 +76,7 @@ npm run build
 如果从旧版本升级（旧表：`products`、`transactions`、`storage_locations`），需运行迁移脚本将数据平滑迁移至新版模型：
 
 ```powershell
-uv run run_migration.py
+uv run python run_migration.py
 ```
 
 ## 说明
