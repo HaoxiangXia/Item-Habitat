@@ -1,3 +1,22 @@
+<script setup>
+import { computed } from 'vue'
+import { useInventoryStore } from './stores/inventory.store'
+import { useRoute } from 'vue-router'
+import AuroraBackground from './components/layout/AuroraBackground.vue'
+import FlashMessageStack from './components/layout/FlashMessageStack.vue'
+import Sidebar from './components/layout/Sidebar.vue'
+
+const inventory = useInventoryStore()
+const route = useRoute()
+
+const fatalError = computed(() => inventory.isReady && Boolean(inventory.errorMessage))
+const isLoginPage = computed(() => route.name === 'Login')
+
+async function retry() {
+  await inventory.loadBootstrap()
+}
+</script>
+
 <template>
   <AuroraBackground />
 
@@ -23,9 +42,9 @@
   </div>
 
   <template v-else>
-    <Sidebar />
+    <Sidebar v-if="!isLoginPage" />
 
-    <main class="main-content">
+    <main :class="['main-content', { 'full-width': isLoginPage }]">
       <FlashMessageStack />
       <router-view v-slot="{ Component }">
         <transition name="fade-transform" mode="out-in">
@@ -36,18 +55,11 @@
   </template>
 </template>
 
-<script setup>
-import { computed } from 'vue'
-import { useInventoryStore } from './stores/inventory.store'
-import AuroraBackground from './components/layout/AuroraBackground.vue'
-import FlashMessageStack from './components/layout/FlashMessageStack.vue'
-import Sidebar from './components/layout/Sidebar.vue'
-
-const inventory = useInventoryStore()
-
-const fatalError = computed(() => inventory.isReady && Boolean(inventory.errorMessage))
-
-async function retry() {
-  await inventory.loadBootstrap()
+<style>
+/* 增加全屏样式支持 */
+.main-content.full-width {
+  margin-left: 0 !important;
+  width: 100% !important;
+  padding: 0 !important;
 }
-</script>
+</style>

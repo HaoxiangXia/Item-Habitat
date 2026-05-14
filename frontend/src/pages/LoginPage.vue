@@ -1,13 +1,12 @@
 <template>
-  <div class="login-container">
+  <div class="login-wrapper">
     <AuroraBackground class="aurora-fixed" />
     
-    <div class="login-card-wrapper">
+    <div class="login-content">
       <GlassCard class="login-card">
         <div class="login-header">
-          <div class="logo">🏘️</div>
-          <h1>栖物志</h1>
-          <p>给每件物品一个清晰、可追踪的栖息地</p>
+          <h1 class="brand-title">栖物志</h1>
+          <p class="brand-subtitle">给每件物品一个清晰、可追踪的栖息地</p>
         </div>
 
         <form class="login-form" @submit.prevent="handleLogin">
@@ -17,7 +16,7 @@
               v-model="username" 
               placeholder="输入你的账号" 
               required
-              class="custom-input"
+              class="glass-input"
             />
           </div>
           
@@ -28,22 +27,25 @@
               type="password" 
               placeholder="输入你的密码" 
               required 
-              class="custom-input"
+              class="glass-input"
             />
           </div>
 
-          <div class="form-error" v-if="error">{{ error }}</div>
+          <transition name="shake">
+            <div class="form-error" v-if="error">{{ error }}</div>
+          </transition>
 
           <Button 
             type="submit" 
-            class="login-btn" 
+            class="login-btn-fancy" 
             :loading="loading"
           >
             开启探索
           </Button>
 
           <div class="login-footer">
-            <span>大学生轻量化物品管理系统</span>
+            <span class="footer-tag">ITEM HABITAT</span>
+            <span class="footer-desc">大学生轻量化物品管理系统</span>
           </div>
         </form>
       </GlassCard>
@@ -70,7 +72,6 @@ const password = ref('')
 const loading = ref(false)
 const error = ref('')
 
-// 如果已经登录，直接跳转首页
 onMounted(() => {
   if (auth.isAuthenticated) {
     router.push('/')
@@ -112,16 +113,6 @@ const handleLogin = async () => {
 </script>
 
 <style scoped>
-.login-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  background: #0f172a;
-}
-
 .aurora-fixed {
   position: absolute;
   top: 0;
@@ -129,85 +120,166 @@ const handleLogin = async () => {
   width: 100%;
   height: 100%;
   pointer-events: none;
+  opacity: 1;
 }
 
-.login-card-wrapper {
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-content {
   width: 100%;
-  max-width: 420px;
-  padding: 20px;
+  max-width: 440px;
+  padding: 24px;
   z-index: 10;
+  animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .login-card {
-  padding: 40px;
-  border-radius: 24px;
+  padding: 48px;
+  border-radius: 32px;
+  backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 .login-header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 40px;
 }
 
-.logo {
-  font-size: 48px;
-  margin-bottom: 12px;
-}
-
-.login-header h1 {
-  font-size: 2rem;
+.brand-title {
+  font-size: 2.5rem;
   font-weight: 800;
   color: white;
-  margin-bottom: 8px;
-  letter-spacing: -1px;
+  margin-bottom: 12px;
+  letter-spacing: 0.1em;
+  background: linear-gradient(135deg, #fff 0%, #0075de 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.login-header p {
+.brand-subtitle {
   color: #94a3b8;
-  font-size: 0.9rem;
-  line-height: 1.5;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  font-weight: 300;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .form-group label {
-  color: #e2e8f0;
-  font-size: 0.85rem;
-  font-weight: 500;
-  margin-left: 4px;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-left: 12px;
+}
+
+.glass-input :deep(input) {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 14px !important;
+  color: white !important;
+  padding: 12px 16px !important;
+  transition: all 0.3s ease;
+}
+
+.glass-input :deep(input:focus) {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.05);
 }
 
 .form-error {
-  color: #f87171;
+  color: #fca5a5;
   font-size: 0.85rem;
   text-align: center;
-  background: rgba(248, 113, 113, 0.1);
-  padding: 8px;
-  border-radius: 8px;
+  background: rgba(239, 68, 68, 0.1);
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
-.login-btn {
-  height: 48px;
-  font-size: 1rem;
+.login-btn-fancy {
+  height: 52px;
+  width: 100%;
+  max-width: 240px;
+  align-self: center;
+  font-size: 1.1rem;
   font-weight: 600;
-  margin-top: 10px;
+  border-radius: 14px;
+  background: white;
+  color: var(--color-brand, #0075de);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  margin-top: 8px;
+}
+
+.login-btn-fancy:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -5px rgba(255, 255, 255, 0.2);
+  filter: brightness(1.1);
 }
 
 .login-footer {
-  margin-top: 24px;
-  text-align: center;
-  color: #64748b;
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.6;
+}
+
+.footer-tag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: white;
+  letter-spacing: 0.2em;
+}
+
+.footer-desc {
+  color: #94a3b8;
   font-size: 0.75rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 24px;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.shake-enter-active {
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
 }
 </style>
